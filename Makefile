@@ -3,13 +3,14 @@
 # You will need to set this to the directory that the Olson timezone data
 # files are in.
 #
-OLSON_DIR = /home/damon/src/olson/tzdata2006b
-
+#OLSON_DIR = /home/build/vzic-1.3/tzdata2008f
+OLSON_DIR = /home/build/vzic-1.3/tzdata2009d
 
 # This is used as the PRODID property on the iCalendar files output.
 # It identifies the product which created the iCalendar objects.
 # So you need to substitute your own organization name and product.
-PRODUCT_ID = -//My Organization//NONSGML My Product//EN
+#PRODUCT_ID = -//iCal4j//NONSGML iCal4j 1.0-rc1//EN
+PRODUCT_ID = -//tzurl.org//NONSGML Olson 2009d//EN
 
 # This is what libical-evolution uses.
 #PRODUCT_ID = -//Ximian//NONSGML Evolution Olson-VTIMEZONE Converter//EN
@@ -23,7 +24,8 @@ PRODUCT_ID = -//My Organization//NONSGML My Product//EN
 # gets expanded to today's date. There is also a vzic-merge.pl which can be
 # used to merge changes into a master set of VTIMEZONEs. If a VTIMEZONE has
 # changed, it bumps the version number on the end of this prefix. */
-TZID_PREFIX = /myorganization.org/%D_1/
+TZID_PREFIX = 
+#TZID_PREFIX = /ical4j_1_0_rc1/
 
 # This is what libical-evolution uses.
 #TZID_PREFIX = /softwarestudio.org/Olson_%D_1/
