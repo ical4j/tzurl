@@ -1984,7 +1984,8 @@ output_rrule                (char           *rrule_buffer,
            so combine the above RRULEs (commented) into a single RRULE using BYYEARDAY */
 
         day_number = 0;
-        for (int i = month+1; i < 12; i++) {
+        int i;
+        for (i = month+1; i < 12; i++) {
                 day_number += DaysInMonth[i];
         }
         sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
@@ -2055,7 +2056,8 @@ output_rrule                (char           *rrule_buffer,
            so combine the above RRULEs (commented) into a single RRULE using BYYEARDAY */
 
         day_number = 0;
-        for (int i = month+1; i < 12; i++) {
+        int i;
+        for (i = month+1; i < 12; i++) {
                 day_number += DaysInMonth[i];
         }
         sprintf (rrule_buffer, "RRULE:FREQ=YEARLY;BYYEARDAY=-%i,-%i,-%i,-%i,-%i,-%i,-%i;BYDAY=%s%s\r\n",
