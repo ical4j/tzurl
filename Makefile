@@ -3,7 +3,7 @@
 # You will need to set this to the directory that the Olson timezone data
 # files are in.
 #
-OLSON_DIR = /home/build/tzurl/tzdata2010o
+OLSON_DIR = /home/$(USER)/tzurl/tzdata2010o
 
 # This is used as the PRODID property on the iCalendar files output.
 # It identifies the product which created the iCalendar objects.
