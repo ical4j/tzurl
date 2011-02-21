@@ -3,12 +3,12 @@
 # You will need to set this to the directory that the Olson timezone data
 # files are in.
 #
-OLSON_DIR = $(PWD)/tzdata2010o
+OLSON_DIR = $(PWD)/tzdata2011b
 
 # This is used as the PRODID property on the iCalendar files output.
 # It identifies the product which created the iCalendar objects.
 # So you need to substitute your own organization name and product.
-PRODUCT_ID = -//tzurl.org//NONSGML Olson 2010o//EN
+PRODUCT_ID = -//tzurl.org//NONSGML Olson 2011b//EN
 
 # This is what libical-evolution uses.
 #PRODUCT_ID = -//Ximian//NONSGML Evolution Olson-VTIMEZONE Converter//EN
