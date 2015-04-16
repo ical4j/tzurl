@@ -1,3 +1,4 @@
-rsync -e ssh -av zoneinfo-global modularity@tzurl.org:tzurl.org
-rsync -e ssh -av zoneinfo-outlook-global modularity@tzurl.org:tzurl.org
+#!/usr/bin/env bash
+rsync -e ssh -av zoneinfo-global $SSH_USER@tzurl.org:tzurl.org
+rsync -e ssh -av zoneinfo-outlook-global $SSH_USER@tzurl.org:tzurl.org
 
