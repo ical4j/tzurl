@@ -1,0 +1,2 @@
+language: c
+after_script: sh generate-zoneinfo.sh && sh upload.sh
