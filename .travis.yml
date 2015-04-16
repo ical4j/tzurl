@@ -1,5 +1,5 @@
 language: c
 script:
-    "wget http://www.iana.org/time-zones/repository/releases/tzdata2015c.tar.gz && mkdir tzdata2015c && cd tzdata2015c && tar zxf ../tzdata2015c.tar.gz && cd .. && make"
+    "wget http://www.iana.org/time-zones/repository/releases/tzdata$(TZDATA_RELEASE).tar.gz && mkdir tzdata$(TZDATA_RELEASE) && cd tzdata$(TZDATA_RELEASE) && tar zxf ../tzdata$(TZDATA_RELEASE).tar.gz && cd .. && make"
 after_success:
     "sh generate-zoneinfo.sh && sh upload.sh"
