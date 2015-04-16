@@ -1,2 +1,3 @@
 language: c
-after_script: sh generate-zoneinfo.sh && sh upload.sh
+after_success:
+	"sh generate-zoneinfo.sh && sh upload.sh"
