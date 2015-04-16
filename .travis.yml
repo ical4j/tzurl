@@ -1,4 +1,6 @@
 language: c
+addons:
+  ssh_known_hosts: tzurl.org
 script:
     - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
     - mkdir tzdata$TZDATA_RELEASE
