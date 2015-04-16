@@ -2,3 +2,4 @@ zoneinfo*
 tzdata*
 vzic
 vzic*.o
+.idea
