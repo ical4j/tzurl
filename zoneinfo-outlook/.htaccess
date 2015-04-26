@@ -1,0 +1,15 @@
+#AddCharset UTF-8 .html
+AddCharset iso-8859-1 .html
+
+Options +FollowSymlinks
+
+RewriteEngine On
+RewriteBase /zoneinfo-outlook
+
+#  now the rewriting rules
+
+# Append '.ics' to requests (case-insensitive, last rule)
+RewriteRule   ^(.+(?<!\.ics|\.html|/))$  /$1.ics [NC,L]
+
+# Apply alias rewrite for deprecated IDs
+
