@@ -165,10 +165,14 @@ main				(int		 argc,
   convert_olson_file ("northamerica");
   convert_olson_file ("southamerica");
 
+  /*
+   * ical4j supports Etc/* timezones
+   */
+  convert_olson_file ("etcetera");
+
   /* These are backwards-compatability and weird stuff. */
 #if 0
   convert_olson_file ("backward");
-  convert_olson_file ("etcetera");
   convert_olson_file ("leapseconds");
   convert_olson_file ("pacificnew");
   convert_olson_file ("solar87");
