@@ -5,5 +5,5 @@ cd tzdata$TZDATA_RELEASE
 tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
 cd ..
 make
-sh generate-zoneinfo.sh
-sh generate-htaccess-alias.sh
+./generate-zoneinfo.sh
+./generate-htaccess-alias.sh
