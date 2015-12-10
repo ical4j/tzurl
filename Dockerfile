@@ -1,6 +1,6 @@
 FROM httpd:2.4
 
-RUN apt-get install -y make
+RUN apt-get update && apt-get install -y make wget
 
 ENV TZDATA_RELEASE 2015g
 
