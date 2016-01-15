@@ -6,7 +6,7 @@ ENV TZDATA_RELEASE 2015g
 
 WORKDIR /usr/local/apache2/htdocs
 
-COPY build.sh generate* Makefile *.c *.h htaccess.tzurl ./
+COPY build.sh generate* Makefile *.c *.h htaccess.tzurl index.html ./
 
 RUN ./build.sh
 
