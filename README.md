@@ -1,6 +1,6 @@
 # tzurl - zoneinfo in VTIMEZONE format
 
-This project is a fork of the vzic project, which implements conversion of Olson tzdata into iCalendar VTIMEZONE objects.
+This project is a fork of the vzic project, which implements conversion of Olson tzdata into iCalendar [VTIMEZONE](https://tools.ietf.org/html/rfc2445#section-4.6.5) objects.
 
 The original vzic readme is available [here](README.vzic).
 Ultimately the conversion code is largely unchanged. This project adds the capability to serve the VTIMEZONE objects from an
