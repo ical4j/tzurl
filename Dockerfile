@@ -2,7 +2,7 @@ FROM httpd:2.4
 
 RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev
 
-ENV TZDATA_RELEASE 2015g
+ENV TZDATA_RELEASE 2016a
 
 WORKDIR /usr/local/apache2/htdocs
 
