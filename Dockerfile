@@ -1,6 +1,10 @@
 FROM httpd:2.4
 
-RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev
+RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev awstats
+
+COPY awstats.tzurl.org.conf /etc/awstats
+
+RUN touch /usr/local/apache2/logs/access.log && /usr/lib/cgi-bin/awstats.pl -config=tzurl.org -update
 
 ENV TZDATA_RELEASE 2016a
 
