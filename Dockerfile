@@ -1,6 +1,6 @@
 FROM httpd:2.4
 
-RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev awstats cron
+RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev awstats cron rsyslog
 
 COPY awstats.conf /etc/awstats/
 
@@ -18,3 +18,4 @@ RUN ./build.sh && mv htaccess.tzurl .htaccess
 #COPY ./zoneinfo-outlook/ /usr/local/apache2/htdocs/zoneinfo-outlook/
 #COPY ./htaccess.tzurl /usr/local/apache2/htdocs/.htaccess
 
+CMD /usr/sbin/cron && httpd-foreground
