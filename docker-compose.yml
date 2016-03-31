@@ -1,5 +1,6 @@
 tzurl:
   image: benfortuna/tzurl
+  mem_limit: 268435456
 haproxy:
   image: eeacms/haproxy
   links:
@@ -7,4 +8,4 @@ haproxy:
   ports:
     - "80:5000"
     - "1936:1936"
-
+  mem_limit: 134217728
