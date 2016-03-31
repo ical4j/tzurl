@@ -1,0 +1,10 @@
+tzurl:
+  build: .
+haproxy:
+  image: eeacms/haproxy
+  links:
+  - tzurl
+  ports:
+  - "80:5000"
+  - "1936:1936"
+
