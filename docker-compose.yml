@@ -1,10 +1,10 @@
 tzurl:
-  build: .
+  image: benfortuna/tzurl
 haproxy:
   image: eeacms/haproxy
   links:
-  - tzurl
+    - tzurl
   ports:
-  - "80:5000"
-  - "1936:1936"
+    - "80:5000"
+    - "1936:1936"
 
