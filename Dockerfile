@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc p
 
 COPY awstats.conf /etc/awstats/
 
-ENV TZDATA_RELEASE 2016b
+ENV TZDATA_RELEASE 2016c
 
 WORKDIR /usr/local/apache2/htdocs
 
