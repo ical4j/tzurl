@@ -1,6 +1,19 @@
 tzurl:
-  image: benfortuna/tzurl
+  #image: benfortuna/tzurl
+  build: .
   mem_limit: 268435456
+  volumes_from:
+    - logs
+    - awstats
+logs:
+  image: tianon/true
+  volumes:
+   - /usr/local/apache2/logs
+awstats:
+  build: .
+  dockerfile: Dockerfile.awstats
+  volumes_from:
+    - logs
 haproxy:
   image: tutum/haproxy
   links:

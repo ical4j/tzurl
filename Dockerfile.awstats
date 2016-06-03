@@ -1,0 +1,9 @@
+FROM httpd:2.4
+
+RUN apt-get update && apt-get install -y --no-install-recommends awstats cron rsyslog
+
+COPY awstats.conf /etc/awstats/
+
+VOLUME ["/usr/lib/cgi-bin", "/usr/share/awstats", "/usr/local/apache2/logs"]
+
+CMD /usr/sbin/cron -f
