@@ -4,6 +4,6 @@ mkdir tzdata$TZDATA_RELEASE
 cd tzdata$TZDATA_RELEASE
 tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
 cd ..
-make
+make clean && make
 ./generate-zoneinfo.sh
 ./generate-htaccess-alias.sh
