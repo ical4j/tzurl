@@ -14,4 +14,6 @@ COPY build.sh generate* Makefile *.c *.h htaccess.tzurl index.html ./
 
 RUN ./build.sh && mv htaccess.tzurl .htaccess
 
+VOLUME /zoneinfo /zoneinfo-outlook /zoneinfo-global /zoneinfo-global-outlook
+
 CMD /usr/sbin/cron && httpd-foreground
