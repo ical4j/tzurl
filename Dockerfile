@@ -1,10 +1,10 @@
 FROM httpd:2.4
 
-RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev awstats cron rsyslog
+RUN apt-get update && apt-get install -y --no-install-recommends make wget gcc pkg-config libglib2.0-dev awstats cron rsyslog rsync
 
 COPY awstats.conf /etc/awstats/
 
-ENV TZDATA_RELEASE 2017a
+ENV TZDATA_RELEASE 2017b
 
 WORKDIR /usr/local/apache2/htdocs
 
