@@ -10,6 +10,7 @@ WORKDIR /usr/local/apache2/htdocs
 
 COPY httpd.conf /usr/local/apache2/conf/httpd.conf
 
+COPY images/ images/
 COPY build.sh generate* Makefile *.c *.h htaccess.tzurl index.html ./
 
 RUN ./build.sh && mv htaccess.tzurl .htaccess

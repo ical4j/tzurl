@@ -9,7 +9,7 @@ RewriteBase /
 #  now the rewriting rules
 
 # Append '.ics' to requests (case-insensitive, last rule)
-RewriteRule   ^(.+(?<!\.ics|\.html|/))$  /$1.ics [NC,L]
+RewriteRule   ^(.+(?<!\.ics|\.html|\.jpg|/))$  /$1.ics [NC,L]
 RewriteRule ^(.*)(?<!Pacific/)Kwajalein $1Pacific/Kwajalein [NC,L]
 RewriteRule ^(.*)(?<!Asia/)Singapore $1Asia/Singapore [NC,L]
 RewriteRule ^(.*)(?<!Etc/)UCT $1Etc/UCT [NC,L]
