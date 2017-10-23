@@ -7,6 +7,13 @@ The original vzic readme is available [here](README.vzic).
 Ultimately the conversion code is largely unchanged. This project adds the capability 
 to serve the VTIMEZONE objects from an Apache web server.
 
+## Build
+
+### Docker
+
+    docker build --tag tzurl .
+    
+
 ## Running in Docker
 
 A Docker image has been created from this project and can be run as follows:

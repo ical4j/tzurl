@@ -2,12 +2,19 @@ language: c
 addons:
   ssh_known_hosts: tzurl.org
 script:
-    - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
-    - mkdir tzdata$TZDATA_RELEASE
-    - cd tzdata$TZDATA_RELEASE
-    - tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
-    - cd ..
-    - make
-after_success:
-    - sh generate-zoneinfo.sh
-    - sh upload.sh
+  - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
+  - mkdir tzdata$TZDATA_RELEASE
+  - cd tzdata$TZDATA_RELEASE
+  - tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
+  - cd ..
+  - make
+before_deploy:
+  - openssl aes-256-cbc -K $encrypted_ee29b6fba62b_key -iv $encrypted_ee29b6fba62b_iv -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+  - eval "$(ssh-agent -s)"
+  - chmod 600 /tmp/deploy_rsa
+  - ssh-add /tmp/deploy_rsa
+deploy:
+  provider: script
+  script: "./generate-zoneinfo.sh && ./upload.sh"
+  on:
+    branch: master
