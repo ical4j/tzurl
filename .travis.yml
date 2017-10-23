@@ -2,12 +2,14 @@ language: c
 addons:
   ssh_known_hosts: tzurl.org
 script:
-    - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
-    - mkdir tzdata$TZDATA_RELEASE
-    - cd tzdata$TZDATA_RELEASE
-    - tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
-    - cd ..
-    - make
-after_success:
-    - sh generate-zoneinfo.sh
-    - sh upload.sh
+  - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
+  - mkdir tzdata$TZDATA_RELEASE
+  - cd tzdata$TZDATA_RELEASE
+  - tar zxf ../tzdata$TZDATA_RELEASE.tar.gz
+  - cd ..
+  - make
+deploy:
+  provider: script
+  script: ./generate-zoneinfo.sh && ./upload.sh
+  on:
+    branch: master
