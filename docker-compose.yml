@@ -1,5 +1,6 @@
 tzurl:
-  image: benfortuna/tzurl
+#  image: benfortuna/tzurl
+  build: .
   mem_limit: 268435456
 haproxy:
   image: haproxy:1.8
@@ -8,6 +9,8 @@ haproxy:
   volumes:
     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
   environment:
+    - "HOST1=tzurl"
+    - "HOST2=$HOST2"
     - "STATS_USER=$STATS_USER"
     - "STATS_PASSWORD=$STATS_PASSWORD"
   ports:
