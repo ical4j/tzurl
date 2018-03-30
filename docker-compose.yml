@@ -1,6 +1,5 @@
 tzurl:
-#  image: benfortuna/tzurl
-  build: .
+  image: benfortuna/tzurl
   mem_limit: 268435456
 haproxy:
   image: haproxy:1.8
