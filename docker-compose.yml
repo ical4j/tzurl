@@ -8,6 +8,8 @@ haproxy:
   volumes:
     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
   environment:
+    - "HOST1=tzurl"
+    - "HOST2=$HOST2"
     - "STATS_USER=$STATS_USER"
     - "STATS_PASSWORD=$STATS_PASSWORD"
   ports:
