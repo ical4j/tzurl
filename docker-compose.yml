@@ -2,10 +2,15 @@ tzurl:
   image: benfortuna/tzurl
   mem_limit: 268435456
 haproxy:
-  image: tutum/haproxy
+  image: haproxy:1.8
   links:
     - tzurl
+  volumes:
+    - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+  environment:
+    - "STATS_USER=$STATS_USER"
+    - "STATS_PASSWORD=$STATS_PASSWORD"
   ports:
     - "80:80"
-    - "1936:1936"
+    - "32700:32700"
   mem_limit: 134217728
