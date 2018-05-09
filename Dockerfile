@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends make curl ca-ce
 
 COPY awstats.conf /etc/awstats/
 
-ENV TZDATA_RELEASE 2018d
+ENV TZDATA_RELEASE 2018e
 
 WORKDIR /usr/local/apache2/htdocs
 
