@@ -1,6 +1,6 @@
 language: c
 addons:
-  ssh_known_hosts: tzurl.org
+  ssh_known_hosts: mnode.org
 script:
 - wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
 - mkdir tzdata$TZDATA_RELEASE && tar -zxf tzdata$TZDATA_RELEASE.tar.gz -C tzdata$TZDATA_RELEASE
