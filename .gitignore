@@ -3,3 +3,5 @@ tzdata*
 vzic
 vzic*.o
 .idea
+*.tfvars
+*.tfstate*
