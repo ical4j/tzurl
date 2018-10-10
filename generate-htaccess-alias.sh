@@ -6,4 +6,4 @@
 awk '/Link/ {print "RewriteRule","^(.*)"$3,"$1"$2,"[NC]"}' tzdata$TZDATA_RELEASE/backward >> htaccess.tzurl
 
 # Remove rewrites that cause infinite loop..
-sed -r -i.bak '/\*\)(Kwajalein)|(Singapore)|(UCT)|(UTC)/d' htaccess.tzurl
+sed -E -i.bak '/\*\)(Kwajalein)|\*\)(Jamaica)|(Singapore)|(UCT)|(UTC)/d' htaccess.tzurl

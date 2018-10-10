@@ -9,11 +9,12 @@ RewriteBase /
 #  now the rewriting rules
 
 # Append '.ics' to requests (case-insensitive, last rule)
-RewriteRule   ^(.+(?<!\.ics|\.html|\.jpg|/))$  /$1.ics [NC,L]
+RewriteRule   ^(.+(?<!\.ics|\.html|\.jpg|/|awstats))$  /$1.ics [NC,L]
 RewriteRule ^(.*)(?<!Pacific/)Kwajalein $1Pacific/Kwajalein [NC,L]
 RewriteRule ^(.*)(?<!Asia/)Singapore $1Asia/Singapore [NC,L]
 RewriteRule ^(.*)(?<!Etc/)UCT $1Etc/UCT [NC,L]
 RewriteRule ^(.*)(?<!Etc/)UTC $1Etc/UTC [NC,L]
+RewriteRule ^(.*)(?<!America/)Jamaica $1America/Jamaica [NC,L]
 
 # Apply alias rewrite for deprecated IDs
 
