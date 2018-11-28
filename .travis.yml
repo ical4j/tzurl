@@ -1,8 +1,10 @@
 language: c
 addons:
   ssh_known_hosts: www2.tzurl.org
+env:
+  - TZDATA_RELEASE=2018g-rearguard TZDATA_BASE_URL=https://web.cs.ucla.edu/~eggert/tz/release/2018g/
 script:
-- wget http://www.iana.org/time-zones/repository/releases/tzdata$TZDATA_RELEASE.tar.gz
+- wget ${TZDATA_BASE_URL}tzdata$TZDATA_RELEASE.tar.gz
 - mkdir tzdata$TZDATA_RELEASE && tar -zxf tzdata$TZDATA_RELEASE.tar.gz -C tzdata$TZDATA_RELEASE
 - make && ./generate-zoneinfo.sh
 before_deploy:

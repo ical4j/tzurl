@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends make curl ca-ce
 
 COPY awstats.conf /etc/awstats/
 
-ENV TZDATA_RELEASE 2018e
+ENV TZDATA_RELEASE=2018g-rearguard TZDATA_BASE_URL=https://web.cs.ucla.edu/~eggert/tz/release/2018g/
 
 WORKDIR /usr/local/apache2/htdocs
 
