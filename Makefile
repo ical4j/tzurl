@@ -19,7 +19,7 @@ tzdata:
 
 tzrearguard:
 	mkdir -p tzdb/tzdata$(TZDB_VERSION)-rearguard && \
-		curl -L $(TZDB_BASE_URL)tzdb-$(TZDB_VERSION).tar.lz | tar -zxC tzdb
+		curl -L $(TZDB_BASE_URL)tzdb-$(TZDB_VERSION).tar.lz | tar --lzip -xC tzdb
 
 	cd tzdb/tzdb-$(TZDB_VERSION) && make rearguard_tarballs && \
 		tar -zxf tzdata$(TZDB_VERSION)-rearguard.tar.gz -C ../tzdata$(TZDB_VERSION)-rearguard
