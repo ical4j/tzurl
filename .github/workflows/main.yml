@@ -27,4 +27,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run make
-        run: make vzicbuild tzdata zoneinfo
+        run: make vzicbuild tzdata tzrearguard zoneinfo
