@@ -1,12 +1,9 @@
 SHELL:=/bin/bash
-TZDB_BASE_URL?=http://www.iana.org/time-zones/repository/releases/
-TZDB_VERSION?=2020b
+include .env
 
-OLSON_DIR?=$(PWD)/tzdb/tzdata$(TZDB_VERSION)-rearguard
-PRODUCT_ID?=-//tzurl.org//NONSGML Olson $(TZDB_VERSION)//EN
-TZID_PREFIX?=/tzurl.org/$(TZDB_VERSION)/
+.PHONY: all clean tzdata tzrearguard zoneinfo website rsync rsync-outlook
 
-.PHONY: all tzdata tzrearguard zoneinfo
+TARGET=$(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
 
 all: zoneinfo
 
@@ -27,10 +24,10 @@ tzrearguard:
 	cd tzdb/tzdb-$(TZDB_VERSION) && make rearguard_tarballs && \
 		tar -zxf tzdata$(TZDB_VERSION)-rearguard.tar.gz -C ../tzdata$(TZDB_VERSION)-rearguard
 
-vzicbuild: tzrearguard
-#	mkdir -p vzic && \
-#		curl -L --output vzic/vzic-master.zip https://github.com/libical/vzic/archive/master.zip && \
-#		unzip vzic/vzic-master.zip -d vzic
+vzicbuild:
+	mkdir -p vzic && \
+		curl -L --output vzic/vzic-master.zip https://github.com/libical/vzic/archive/master.zip && \
+		unzip vzic/vzic-master.zip -d vzic
 
 
 zoneinfo:
@@ -43,7 +40,26 @@ zoneinfo:
 	cd vzic/vzic-master && \
 		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX=$(TZID_PREFIX) make -B
 
-	./vzic/vzic-master/vzic --pure --output-dir zoneinfo-global --url-prefix http://tzurl.org/zoneinfo-global
+	./vzic/vzic-master/vzic --pure --output-dir zoneinfo-global --url-prefix http://tzurl.org/zoneinfo-global  && \
+		./vzic/vzic-master/vzic --output-dir zoneinfo-outlook-global --url-prefix http://tzurl.org/zoneinfo-outlook-global
+
+website:
+	website/generate-available-ids.sh zoneinfo/ && \
+		website/generate-directory-listing.sh zoneinfo/
 
 tzalias:
 	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
+
+upload:
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-global s3://tzurl/zoneinfo-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook s3://tzurl/zoneinfo-outlook
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo s3://tzurl/zoneinfo
+
+rsync:
+	rsync -av --delete --copy-links zoneinfo $(TARGET) && \
+		rsync -av --delete --copy-links zoneinfo-global $(TARGET)
+
+rsync-outlook:
+	rsync -av --delete --copy-links zoneinfo-outlook $(TARGET) && \
+		rsync -av --delete --copy-links zoneinfo-outlook-global $(TARGET)
