@@ -31,6 +31,8 @@ vzicbuild:
 
 
 zoneinfo:
+	rm -rf zoneinfo zoneinfo-outlook zoneinfo-global zoneinfo-outlook-global
+
 	cd vzic/vzic-master && \
 		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX="" make -B
 
