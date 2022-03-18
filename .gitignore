@@ -7,3 +7,4 @@ vzic*.o
 .idea
 *.tfvars
 *.tfstate*
+tz.alias
