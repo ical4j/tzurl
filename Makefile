@@ -1,88 +1,67 @@
+SHELL:=/bin/bash
+include .env
 
-#
-# You will need to set this to the directory that the Olson timezone data
-# files are in.
-#
-OLSON_DIR = $(PWD)/tzdata$(TZDATA_RELEASE)
+.PHONY: all clean tzdata tzrearguard zoneinfo website rsync rsync-outlook
 
-# This is used as the PRODID property on the iCalendar files output.
-# It identifies the product which created the iCalendar objects.
-# So you need to substitute your own organization name and product.
-PRODUCT_ID = -//tzurl.org//NONSGML Olson $(TZDATA_RELEASE)//EN
+TARGET=$(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
 
-# This is what libical-evolution uses.
-#PRODUCT_ID = -//Ximian//NONSGML Evolution Olson-VTIMEZONE Converter//EN
-
-
-# This is used to create unique IDs for each VTIMEZONE component.
-# The prefix is put before each timezone city name. It should start and end
-# with a '/'. The first part, i.e. 'myorganization.org' below, should be
-# a unique vendor ID, e.g. use a hostname. The part after that can be
-# anything you want. We use a date and version number for libical. The %D
-# gets expanded to today's date. There is also a vzic-merge.pl which can be
-# used to merge changes into a master set of VTIMEZONEs. If a VTIMEZONE has
-# changed, it bumps the version number on the end of this prefix. */
-TZID_PREFIX = 
-
-# This is what libical-evolution uses.
-#TZID_PREFIX = /softwarestudio.org/Olson_%D_1/
-
-
-# Set any -I include directories to find the libical header files, and the
-# libical library to link with. You only need these if you want to run the
-# tests. You may need to change the '#include <ical.h>' line at the top of
-# test-vzic.c as well.
-LIBICAL_CFLAGS =
-LIBICAL_LDADD = -lical-evolution
-
-
-#
-# You shouldn't need to change the rest of the file.
-#
-
-GLIB_CFLAGS = `pkg-config --cflags glib-2.0`
-GLIB_LDADD = `pkg-config --libs glib-2.0`
-
-CFLAGS = -g -DOLSON_DIR=\"$(OLSON_DIR)\" -DPRODUCT_ID='"$(PRODUCT_ID)"' -DTZID_PREFIX='"$(TZID_PREFIX)"' $(GLIB_CFLAGS) $(LIBICAL_CFLAGS)
-
-OBJECTS = vzic.o vzic-parse.o vzic-dump.o vzic-output.o
-
-all: vzic
-
-vzic: $(OBJECTS)
-	$(CC) $(OBJECTS) $(GLIB_LDADD) -o vzic
-
-test-vzic: test-vzic.o
-	$(CC) test-vzic.o $(LIBICAL_LDADD) -o test-vzic
-
-# Dependencies.
-$(OBJECTS): vzic.h
-vzic.o vzic-parse.o: vzic-parse.h
-vzic.o vzic-dump.o: vzic-dump.h
-vzic.o vzic-output.o: vzic-output.h
-
-test-parse: vzic
-	./vzic-dump.pl $(OLSON_DIR)
-	./vzic --dump --pure
-	@echo
-	@echo "#"
-	@echo "# If either of these diff commands outputs anything there may be a problem."
-	@echo "#"
-	diff -ru zoneinfo/ZonesPerl zoneinfo/ZonesVzic
-	diff -ru zoneinfo/RulesPerl zoneinfo/RulesVzic
-
-test-changes: vzic test-vzic
-	./test-vzic --dump-changes
-	./vzic --dump-changes --pure
-	@echo
-	@echo "#"
-	@echo "# If this diff command outputs anything there may be a problem."
-	@echo "#"
-	diff -ru zoneinfo/ChangesVzic test-output
+all: zoneinfo
 
 clean:
-	-rm -rf vzic $(OBJECTS) *~ ChangesVzic RulesVzic ZonesVzic RulesPerl ZonesPerl test-vzic test-vzic.o
+	rm -rf tzdb/tzdata$(TZDB_VERSION)/ && \
+		rm -rf tzdb/tzdata$(TZDB_VERSION)-rearguard/ && \
+		rm -rf tzdb/tzdb-$(TZDB_VERSION)/ && \
+		rm -rf vzic/vzic-master/
 
-.PHONY: clean perl-dump test-parse
+tzdata:
+	mkdir -p tzdb/tzdata$(TZDB_VERSION) && \
+		curl -L $(TZDB_BASE_URL)tzdata$(TZDB_VERSION).tar.gz | tar -zxC tzdb/tzdata$(TZDB_VERSION)
+
+tzrearguard:
+	mkdir -p tzdb/tzdata$(TZDB_VERSION)-rearguard && \
+		curl -L $(TZDB_BASE_URL)tzdb-$(TZDB_VERSION).tar.lz | tar --lzip -xC tzdb
+
+	cd tzdb/tzdb-$(TZDB_VERSION) && make rearguard_tarballs && \
+		tar -zxf tzdata$(TZDB_VERSION)-rearguard.tar.gz -C ../tzdata$(TZDB_VERSION)-rearguard
+
+vzicbuild:
+	mkdir -p vzic && \
+		curl -L --output vzic/vzic-master.zip https://github.com/libical/vzic/archive/master.zip && \
+		unzip vzic/vzic-master.zip -d vzic
 
 
+zoneinfo:
+	rm -rf zoneinfo zoneinfo-outlook zoneinfo-global zoneinfo-outlook-global
+
+	cd vzic/vzic-master && \
+		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX="" make -B
+
+	./vzic/vzic-master/vzic --pure --output-dir zoneinfo --url-prefix http://tzurl.org/zoneinfo && \
+		./vzic/vzic-master/vzic --output-dir zoneinfo-outlook --url-prefix http://tzurl.org/zoneinfo-outlook
+
+	cd vzic/vzic-master && \
+		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX=$(TZID_PREFIX) make -B
+
+	./vzic/vzic-master/vzic --pure --output-dir zoneinfo-global --url-prefix http://tzurl.org/zoneinfo-global  && \
+		./vzic/vzic-master/vzic --output-dir zoneinfo-outlook-global --url-prefix http://tzurl.org/zoneinfo-outlook-global
+
+website:
+	website/generate-available-ids.sh zoneinfo/ && \
+		website/generate-directory-listing.sh zoneinfo/
+
+tzalias:
+	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
+
+upload:
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-global s3://tzurl/zoneinfo-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook s3://tzurl/zoneinfo-outlook
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo s3://tzurl/zoneinfo
+
+rsync:
+	rsync -av --delete --copy-links zoneinfo $(TARGET) && \
+		rsync -av --delete --copy-links zoneinfo-global $(TARGET)
+
+rsync-outlook:
+	rsync -av --delete --copy-links zoneinfo-outlook $(TARGET) && \
+		rsync -av --delete --copy-links zoneinfo-outlook-global $(TARGET)

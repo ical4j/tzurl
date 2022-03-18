@@ -1,7 +1,10 @@
 zoneinfo*
 tzdata*
-vzic
+tzdb*
+vzic/vzic-master*
+vzic/vzic-fork/vzic
 vzic*.o
 .idea
 *.tfvars
 *.tfstate*
+tz.alias
