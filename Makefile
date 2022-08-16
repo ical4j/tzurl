@@ -30,38 +30,47 @@ vzicbuild:
 		unzip vzic/vzic-master.zip -d vzic
 
 
-zoneinfo:
-	rm -rf zoneinfo zoneinfo-outlook zoneinfo-global zoneinfo-outlook-global
+zoneinfo: tzdata tzrearguard
+	rm -rf http https && mkdir -p http https
 
 	cd vzic/vzic-master && \
 		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX="" make -B
 
-	./vzic/vzic-master/vzic --pure --output-dir zoneinfo --url-prefix http://tzurl.org/zoneinfo && \
-		./vzic/vzic-master/vzic --output-dir zoneinfo-outlook --url-prefix http://tzurl.org/zoneinfo-outlook
+	./vzic/vzic-master/vzic --pure --output-dir http/zoneinfo --url-prefix http://tzurl.org/zoneinfo && \
+		./vzic/vzic-master/vzic --output-dir http/zoneinfo-outlook --url-prefix http://tzurl.org/zoneinfo-outlook
+
+	./vzic/vzic-master/vzic --pure --output-dir https/zoneinfo --url-prefix https://tzurl.org/zoneinfo && \
+		./vzic/vzic-master/vzic --output-dir https/zoneinfo-outlook --url-prefix https://tzurl.org/zoneinfo-outlook
 
 	cd vzic/vzic-master && \
 		OLSON_DIR=$(OLSON_DIR) PRODUCT_ID="$(PRODUCT_ID)" TZID_PREFIX=$(TZID_PREFIX) make -B
 
-	./vzic/vzic-master/vzic --pure --output-dir zoneinfo-global --url-prefix http://tzurl.org/zoneinfo-global  && \
-		./vzic/vzic-master/vzic --output-dir zoneinfo-outlook-global --url-prefix http://tzurl.org/zoneinfo-outlook-global
+	./vzic/vzic-master/vzic --pure --output-dir http/zoneinfo-global --url-prefix http://tzurl.org/zoneinfo-global  && \
+		./vzic/vzic-master/vzic --output-dir http/zoneinfo-outlook-global --url-prefix http://tzurl.org/zoneinfo-outlook-global
+
+	./vzic/vzic-master/vzic --pure --output-dir https/zoneinfo-global --url-prefix https://tzurl.org/zoneinfo-global  && \
+		./vzic/vzic-master/vzic --output-dir https/zoneinfo-outlook-global --url-prefix https://tzurl.org/zoneinfo-outlook-global
 
 website:
-	website/generate-available-ids.sh zoneinfo/ && \
-		website/generate-directory-listing.sh zoneinfo/
+	website/generate-available-ids.sh http/zoneinfo/ && \
+		website/generate-directory-listing.sh http/zoneinfo/
+
+	website/generate-available-ids.sh https/zoneinfo/ && \
+		website/generate-directory-listing.sh https/zoneinfo/
 
 tzalias:
 	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
 
 upload:
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-global s3://tzurl/zoneinfo-global
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo-outlook s3://tzurl/zoneinfo-outlook
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read zoneinfo s3://tzurl/zoneinfo
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-global s3://tzurl/zoneinfo-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook s3://tzurl/zoneinfo-outlook
+	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo s3://tzurl/zoneinfo
 
 rsync:
-	rsync -av --delete --copy-links zoneinfo $(TARGET) && \
-		rsync -av --delete --copy-links zoneinfo-global $(TARGET)
+	rsync -av --delete --copy-links http/zoneinfo $(TARGET) && \
+		rsync -av --delete --copy-links http/zoneinfo-global $(TARGET)
 
 rsync-outlook:
-	rsync -av --delete --copy-links zoneinfo-outlook $(TARGET) && \
-		rsync -av --delete --copy-links zoneinfo-outlook-global $(TARGET)
+	rsync -av --delete --copy-links http/zoneinfo-outlook $(TARGET) && \
+		rsync -av --delete --copy-links http/zoneinfo-outlook-global $(TARGET)
