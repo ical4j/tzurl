@@ -62,10 +62,10 @@ tzalias:
 	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
 
 upload:
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-global s3://tzurl/zoneinfo-global
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook s3://tzurl/zoneinfo-outlook
-	aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo s3://tzurl/zoneinfo
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-global s3://tzurl/zoneinfo-global
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook-global s3://tzurl/zoneinfo-outlook-global
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo-outlook s3://tzurl/zoneinfo-outlook
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read http/zoneinfo s3://tzurl/zoneinfo
 
 rsync:
 	rsync -av --delete --copy-links http/zoneinfo $(TARGET) && \
