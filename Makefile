@@ -52,11 +52,11 @@ zoneinfo: tzdata tzrearguard
 		./vzic/vzic-master/vzic --output-dir https/zoneinfo-outlook-global --url-prefix https://tzurl.org/zoneinfo-outlook-global
 
 website:
-	website/generate-available-ids.sh http/zoneinfo/ && \
-		website/generate-directory-listing.sh http/zoneinfo/
+	website/generate-available-ids.sh http/zoneinfo && \
+		website/generate-directory-listing.sh http/zoneinfo
 
-	website/generate-available-ids.sh https/zoneinfo/ && \
-		website/generate-directory-listing.sh https/zoneinfo/
+	website/generate-available-ids.sh https/zoneinfo-outlook && \
+		website/generate-directory-listing.sh https/zoneinfo-outlook
 
 tzalias:
 	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
