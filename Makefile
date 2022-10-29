@@ -10,8 +10,7 @@ all: zoneinfo
 clean:
 	rm -rf tzdb/tzdata$(TZDB_VERSION)/ && \
 		rm -rf tzdb/tzdata$(TZDB_VERSION)-rearguard/ && \
-		rm -rf tzdb/tzdb-$(TZDB_VERSION)/ && \
-		rm -rf vzic/vzic-master/
+		rm -rf tzdb/tzdb-$(TZDB_VERSION)/
 
 tzdata:
 	mkdir -p tzdb/tzdata$(TZDB_VERSION) && \
@@ -25,7 +24,7 @@ tzrearguard:
 		tar -zxf tzdata$(TZDB_VERSION)-rearguard.tar.gz -C ../tzdata$(TZDB_VERSION)-rearguard
 
 vzicbuild:
-	mkdir -p vzic && \
+	rm -rf vzic/vzic-master && mkdir -p vzic && \
 		curl -L --output vzic/vzic-master.zip https://github.com/libical/vzic/archive/master.zip && \
 		unzip vzic/vzic-master.zip -d vzic
 
@@ -51,7 +50,7 @@ zoneinfo: tzdata tzrearguard
 	./vzic/vzic-master/vzic --pure --output-dir https/zoneinfo-global --url-prefix https://tzurl.org/zoneinfo-global  && \
 		./vzic/vzic-master/vzic --output-dir https/zoneinfo-outlook-global --url-prefix https://tzurl.org/zoneinfo-outlook-global
 
-website:
+website: zoneinfo
 	website/generate-available-ids.sh http/zoneinfo && \
 		website/generate-directory-listing.sh http/zoneinfo
 
