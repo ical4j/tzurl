@@ -1,0 +1,22 @@
+server {
+    listen 80 default_server;
+    listen [::]:80;
+
+    server_name _;
+
+    location / {
+         rewrite ^(.*)(?<!Pacific/)Kwajalein $1Pacific/Kwajalein last;
+         rewrite ^(.*)(?<!Asia/)Singapore $1Asia/Singapore last;
+         rewrite ^(.*)(?<!Etc/)UCT $1Etc/UCT last;
+         rewrite ^(.*)(?<!Etc/)UTC $1Etc/UTC last;
+         rewrite ^(.*)(?<!America/)Jamaica $1America/Jamaica last;
+         #rewrite ^(.+(?<!\.ics|\.html|\.jpg|/))$ ${STATIC_LOC}$1.ics break;
+         #rewrite ^([^.]+[^\/]$|\.(?!(ics|html|jpg|ico)$)([^.]+)[^\/]$) $scheme://tzurl.sgp1.cdn.digitaloceanspaces.com$1.ics break;
+         rewrite ^([^.]+[^\/]$|\.(?!(ics|html|jpg|ico)$)([^.]+)[^\/]$) ${STATIC_LOC}$1.ics break;
+#         rewrite /$ "${STATIC_LOC}/index.html" break;
+
+#         rewrite ^ ${STATIC_LOC}$request_uri;
+         return 302 ${STATIC_LOC}$request_uri;
+#         try_files $uri ${STATIC_LOC}$request_uri;
+    }
+}
