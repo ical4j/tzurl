@@ -8,7 +8,7 @@ on:
   # publish on pushes to the main branch (image tagged as "latest")
   push:
     branches:
-      - main
+      - master
 
 jobs:
   docker_publish:
