@@ -67,13 +67,13 @@ tzalias:
 	awk '/^Link/ {print $$3,"="$$2}' tzdb/tzdata$(TZDB_VERSION)-rearguard/backward > tz.alias
 
 upload:
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read https/zoneinfo-global s3://www.tzurl/zoneinfo-global
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read https/zoneinfo-outlook-global s3://www.tzurl/zoneinfo-outlook-global
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read https/zoneinfo-outlook s3://www.tzurl/zoneinfo-outlook
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read https/zoneinfo s3://www.tzurl/zoneinfo
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=$(AWS_ENDPOINT) --acl public-read https/zoneinfo-global $(TZURL_BUCKET)/zoneinfo-global
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=$(AWS_ENDPOINT) --acl public-read https/zoneinfo-outlook-global $(TZURL_BUCKET)/zoneinfo-outlook-global
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=$(AWS_ENDPOINT) --acl public-read https/zoneinfo-outlook $(TZURL_BUCKET)/zoneinfo-outlook
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=$(AWS_ENDPOINT) --acl public-read https/zoneinfo $(TZURL_BUCKET)/zoneinfo
 
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read website/images s3://www.tzurl/images
-	AWS_PROFILE=$(AWS_PROFILE) aws s3 cp --endpoint=https://sgp1.digitaloceanspaces.com --acl public-read website/index.html s3://www.tzurl/
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 sync --endpoint=$(AWS_ENDPOINT) --acl public-read website/images $(TZURL_BUCKET)/images
+	AWS_PROFILE=$(AWS_PROFILE) aws s3 cp --endpoint=$(AWS_ENDPOINT) --acl public-read website/index.html $(TZURL_BUCKET)/
 
 rsync:
 	rsync -av --delete --copy-links https/zoneinfo $(TARGET) && \
