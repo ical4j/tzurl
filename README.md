@@ -1,5 +1,5 @@
 [iCal4j]: https://www.ical4j.org
-[tzurl.org]: https://wwww.tzurl.org
+[tzurl.org]: https://www.tzurl.org
 
 # tzurl - zoneinfo in VTIMEZONE format
 
