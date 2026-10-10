@@ -12,13 +12,13 @@ on:
 
 jobs:
   docker_publish:
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Install lzip
-        run: sudo apt-get install lzip
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y lzip libglib2.0-dev
 
       # Runs a single command using the runners shell
       - name: Run make
